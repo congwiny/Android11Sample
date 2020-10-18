@@ -42,6 +42,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
 
+        android:onClick="requestAllFile"
+        android:text="申请所有文件访问权限" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+
         android:onClick="openFileManager"
         android:text="打开文件管理" />
 

@@ -3,6 +3,7 @@ package com.congwiny.android11
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -27,9 +28,9 @@ class MainActivity : AppCompatActivity() {
         const val IMAGE_URL =
             "http://n.sinaimg.cn/sinacn10112/566/w1018h1148/20191111/fd6e-iieqapt6530904.jpg"
         const val IMAGE_URL2 =
-            "http://img.mp.itc.cn/upload/20170302/2c3597d777d5407d938404b7d1c1a992_th.jpg"
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603042397985&di=b507241827170742673ac2438844dd52&imgtype=0&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2802998753%2C362775541%26fm%3D214%26gp%3D0.jpg"
         const val IMAGE_URL3 =
-            "https://hbimg.huabanimg.com/921eef0fcf1c50e611f2c2e1b8ba2a708314d4d837671-X2w943_fw658/format/webp"
+            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1603042394835&di=2dcdf983f0f4558fb2db549238c987c8&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20170122%2F2bbd086e66c344729f3e67668de7adfb_th.jpg"
         const val TAG = "MainActivity"
     }
 
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     // target30不可以
     fun downloadCongwiny(view: View) {
         val file = File(Environment.getExternalStorageDirectory(), "congwiny/meinv.jpg")
-        FileDownloader.getImpl().create(IMAGE_URL2)
+        FileDownloader.getImpl().create(IMAGE_URL)
             .setPath(file.absolutePath)
             .setListener(object : FileDownloadSampleListener() {
                 override fun completed(task: BaseDownloadTask) {
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
             "meinv.jpg"
         )
-        FileDownloader.getImpl().create(IMAGE_URL3)
+        FileDownloader.getImpl().create(IMAGE_URL)
             .setPath(file.absolutePath)
             .setListener(object : FileDownloadSampleListener() {
                 override fun completed(task: BaseDownloadTask) {
@@ -139,6 +140,11 @@ class MainActivity : AppCompatActivity() {
     fun openFileManager(view: View) {
         val intent = Intent()
         intent.setClass(this,FileMainActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun requestAllFile(view: View) {
+        val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
         startActivity(intent)
     }
 }
