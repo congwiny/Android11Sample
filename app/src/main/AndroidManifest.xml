@@ -5,34 +5,50 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- Required only when requesting background location access on
+      Android 10 (API level 29) and higher. -->
+    <!--
+    在 Android 10（API 级别 29）及更高版本中，您必须在应用的清单中声明 ACCESS_BACKGROUND_LOCATION 权限，以便请求在运行时于后台访问位置信息。
+    在较低版本的 Android 系统中，当应用获得前台位置信息访问权限时，也会自动获得后台位置信息访问权限。
+    -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <uses-permission
         android:name="android.permission.DELETE_CACHE_FILES"
         tools:ignore="ProtectedPermissions" />
     <uses-permission
         android:name="android.permission.CLEAR_APP_CACHE"
-        tools:ignore="ProtectedPermissions" />
+        tools:ignore="ProtectedPermissions" /> <!-- api 30 -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-    <!--api 30-->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <!-- api 30 -->
+<!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
 
+    <queries>
+        <package android:name="com.congwiny.android11_2"/>
+    </queries>
 
     <application
         android:name=".Android11SampleApp"
         android:allowBackup="true"
+        android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
+
+
+        <activity android:name=".SAFActivity"></activity>
+        <activity android:name=".MediaProviderActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -51,22 +67,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.congwiny.android11.filemanager.LargeFiles"></activity>
-        <activity android:name="com.congwiny.android11.filemanager.InstalledApks" />
-        <activity android:name="com.congwiny.android11.filemanager.Suggestion" />
-        <activity android:name="com.congwiny.android11.filemanager.InfoActivity" />
-        <activity android:name="com.congwiny.android11.filemanager.AllFilesActivity" />
-        <activity android:name="com.congwiny.android11.filemanager.ImageActivity" />
-        <activity android:name="com.congwiny.android11.filemanager.DocumentActivity" />
-        <activity android:name="com.congwiny.android11.filemanager.VideoActivity" />
-        <activity android:name="com.congwiny.android11.filemanager.MusicActivity" />
+        <activity android:name=".filemanager.LargeFiles" />
+        <activity android:name=".filemanager.InstalledApks" />
+        <activity android:name=".filemanager.Suggestion" />
+        <activity android:name=".filemanager.InfoActivity" />
+        <activity android:name=".filemanager.AllFilesActivity" />
+        <activity android:name=".filemanager.ImageActivity" />
+        <activity android:name=".filemanager.DocumentActivity" />
+        <activity android:name=".filemanager.VideoActivity" />
+        <activity android:name=".filemanager.MusicActivity" />
         <activity
-            android:name="com.congwiny.android11.filemanager.SplashScreen"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-        </activity>
-        <activity android:name="com.congwiny.android11.filemanager.FileMainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:name=".filemanager.SplashScreen"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".filemanager.FileMainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+
+        <!-- Recommended for Android 9 (API level 28) and lower. -->
+        <!-- Required for Android 10 (API level 29) and higher. -->
+        <service
+            android:name=".MyNavigationService"
+            android:foregroundServiceType="location"
+             >
+        <!-- Any inner elements would go here. -->
+    </service>
     </application>
 
 </manifest>
