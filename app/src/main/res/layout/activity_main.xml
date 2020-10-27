@@ -103,5 +103,12 @@
             android:layout_marginTop="30dp"
             android:onClick="testToast"
             android:text="testToast" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="testOverlayPermission"
+            android:text="MANAGE_OVERLAY_PERMISSION" />
     </LinearLayout>
 </ScrollView>

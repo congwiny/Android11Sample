@@ -4,16 +4,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.storage.StorageManager
+import android.provider.Settings
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.congwiny.android11.filemanager.FileMainActivity
@@ -45,10 +48,11 @@ class MainActivity : AppCompatActivity() {
         imageView = findViewById(R.id.meinv_iv)
         AndPermission.with(this)
             .runtime()
-            .permission(
-                Permission.ACCESS_FINE_LOCATION,
-                Permission.ACCESS_COARSE_LOCATION
-            )
+//            .permission(
+//                Permission.ACCESS_FINE_LOCATION,
+//                Permission.ACCESS_COARSE_LOCATION
+//            )
+            .permission(Permission.Group.STORAGE)
             .onGranted {
                 Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show()
             }.onDenied {
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     // target30不可以
     fun downloadCongwiny(view: View) {
         val file = File(Environment.getExternalStorageDirectory(), "congwiny/meinv.jpg")
-        FileDownloader.getImpl().create(IMAGE_URL2)
+        FileDownloader.getImpl().create(IMAGE_URL3)
             .setPath(file.absolutePath)
             .setListener(object : FileDownloadSampleListener() {
                 override fun completed(task: BaseDownloadTask) {
@@ -202,6 +206,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun testOverlayPermission(view: View) {
+        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+        intent.data = Uri.parse("package:$packageName")
+        startActivity(intent)
+    }
+
     fun testForegroundType(view: View) {
         val intent = Intent()
         intent.setClass(this, MyNavigationService::class.java)
@@ -267,6 +278,9 @@ class MainActivity : AppCompatActivity() {
                 startActivityForResult(intent, 120)
             }
             120 -> {
+                Log.e(TAG, "onActivityResult data=$data")
+            }
+            130 -> {
                 Log.e(TAG, "onActivityResult data=$data")
             }
         }
