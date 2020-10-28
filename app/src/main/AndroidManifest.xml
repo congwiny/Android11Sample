@@ -37,7 +37,7 @@
     -->
 
     <queries>
-        <package android:name="com.congwiny.android11_2" />
+        <package android:name="com.congwiny.android11" />
     </queries>
 
     <application
@@ -58,7 +58,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.congwiny.android11.fileprovider"
+            android:authorities="com.congwiny.android11.fileprovider2"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
