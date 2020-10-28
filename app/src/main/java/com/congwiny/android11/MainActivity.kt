@@ -1,7 +1,7 @@
 package com.congwiny.android11
 
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -11,6 +11,7 @@ import android.os.Environment
 import android.os.storage.StorageManager
 import android.provider.Settings
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -20,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.congwiny.android11.filemanager.FileMainActivity
+import com.congwiny.android11.utils.SimCardUtils
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadSampleListener
 import com.liulishuo.filedownloader.FileDownloader
@@ -48,32 +50,24 @@ class MainActivity : AppCompatActivity() {
         imageView = findViewById(R.id.meinv_iv)
         AndPermission.with(this)
             .runtime()
+            .permission(
+                Permission.ACCESS_FINE_LOCATION,
+                Permission.ACCESS_COARSE_LOCATION,
+                Permission.READ_PHONE_NUMBERS,
+                Permission.READ_PHONE_STATE
+                // Permission.ACCESS_BACKGROUND_LOCATION
+            )
 //            .permission(
-//                Permission.ACCESS_FINE_LOCATION,
-//                Permission.ACCESS_COARSE_LOCATION
+//                Permission.READ_PHONE_NUMBERS,
+//                Permission.READ_PHONE_STATE
 //            )
-            .permission(Permission.Group.STORAGE)
+            //  .permission(Permission.Group.STORAGE)
             .onGranted {
                 Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show()
             }.onDenied {
                 Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show()
             }
             .start()
-
-        imageView?.postDelayed({
-            Log.e(TAG, "requst ACCESS_BACKGROUND_LOCATION")
-            AndPermission.with(this)
-                .runtime()
-                .permission(
-                    Permission.ACCESS_BACKGROUND_LOCATION
-                )
-                .onGranted {
-                    Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show()
-                }.onDenied {
-                    Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show()
-                }
-                .start()
-        }, 10000)
     }
 
     //不管什么target, android 11其他应用上访问不了
@@ -177,7 +171,51 @@ class MainActivity : AppCompatActivity() {
 
     fun requestAllFile(view: View) {
         val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-        startActivity(intent)
+        startActivityForResult(intent, 130)
+    }
+
+    fun readPhoneNumber(view: View) {
+//        if (ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.READ_PHONE_NUMBERS
+//            ) == PackageManager.PERMISSION_GRANTED
+//            &&
+//            ContextCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.READ_PHONE_STATE
+//            ) == PackageManager.PERMISSION_GRANTED
+//        ) {
+        try {
+            val manager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            val number = manager.line1Number
+            Log.e(TAG, "readPhoneNumber number=$number")
+        } catch (e: Exception) {
+            Log.e(TAG, "readPhoneNumber", e)
+        }
+
+        //    }
+    }
+
+    @RequiresApi(30)
+    fun actionAutoRevokePermissions(view: View) {
+        val intent = Intent(Intent.ACTION_AUTO_REVOKE_PERMISSIONS)
+        intent.data = Uri.fromParts("package", packageName, null)
+        startActivityForResult(intent, 140)
+    }
+
+    fun requestBackgroundLocation(view: View) {
+        Log.e(TAG, "requst ACCESS_BACKGROUND_LOCATION")
+        AndPermission.with(this)
+            .runtime()
+            .permission(
+                Permission.ACCESS_BACKGROUND_LOCATION
+            )
+            .onGranted {
+                Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show()
+            }.onDenied {
+                Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show()
+            }
+            .start()
     }
 
     fun mediaprovider(view: View) {
@@ -200,10 +238,19 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, 110)
     }
 
+    fun clearAppCache(view: View) {
+        val intent = Intent(StorageManager.ACTION_CLEAR_APP_CACHE)
+        startActivityForResult(intent, 120)
+    }
+
     fun testSAF(view: View) {
         val intent = Intent()
         intent.setClass(this, SAFActivity::class.java)
         startActivity(intent)
+    }
+
+    fun testPermanentSimId(view: View) {
+        SimCardUtils.getSimIccId(this)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -222,7 +269,7 @@ class MainActivity : AppCompatActivity() {
 
         imageView?.postDelayed({
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Log.e(TAG,"delay testForegroundType")
+                Log.e(TAG, "delay testForegroundType")
                 startForegroundService(intent)
             }
         }, 1000 * 60)
@@ -238,8 +285,8 @@ class MainActivity : AppCompatActivity() {
             }
             toast.show()
             //Toast.makeText(this@MainActivity,"toast test",Toast.LENGTH_SHORT).show()
-            Log.e(TAG,"showToast...")
-        }, 60*1000)
+            Log.e(TAG, "showToast...")
+        }, 60 * 1000)
     }
 
 
@@ -273,15 +320,34 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             110 -> {
-                Log.e(TAG, "onActivityResult data=$data")
+                Log.e(
+                    TAG,
+                    "onActivityResult requestCode=$requestCode, resultCode=$resultCode, data=$data"
+                )
                 val intent = Intent(StorageManager.ACTION_CLEAR_APP_CACHE)
                 startActivityForResult(intent, 120)
             }
             120 -> {
-                Log.e(TAG, "onActivityResult data=$data")
+                Log.e(
+                    TAG,
+                    "onActivityResult requestCode=$requestCode, resultCode=$resultCode, data=$data"
+                )
             }
             130 -> {
-                Log.e(TAG, "onActivityResult data=$data")
+                Log.e(
+                    TAG,
+                    "onActivityResult requestCode=$requestCode, resultCode=$resultCode, data=$data"
+                )
+                if (Build.VERSION.SDK_INT >= 30) {
+                    val isManager = Environment.isExternalStorageManager()
+                    Log.e(TAG, "isExternalStorageManager = $isManager")
+                }
+            }
+            140 -> {
+                Log.e(
+                    TAG,
+                    "onActivityResult requestCode=$requestCode, resultCode=$resultCode, data=$data"
+                )
             }
         }
 

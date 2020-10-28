@@ -59,6 +59,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+
+            android:onClick="clearAppCache"
+            android:text="清除应用缓存" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:onClick="openFileManager"
             android:text="打开文件管理" />
 
@@ -87,6 +95,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:onClick="readPhoneNumber"
+            android:text="读取手机号码" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="actionAutoRevokePermissions"
+            android:text="ACTION_AUTO_REVOKE_PERMISSIONS" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="requestBackgroundLocation"
+            android:text="申请后台定位权限" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:onClick="testAppVisibility"
             android:text="软件包可见性" />
 
@@ -110,5 +140,12 @@
             android:layout_marginTop="30dp"
             android:onClick="testOverlayPermission"
             android:text="MANAGE_OVERLAY_PERMISSION" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:onClick="testPermanentSimId"
+            android:text="永久sim标识符" />
     </LinearLayout>
 </ScrollView>

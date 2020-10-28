@@ -6,18 +6,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"/> <!--android:maxSdkVersion="29"-->
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Required only when requesting background location access on
       Android 10 (API level 29) and higher. -->
     <!--
     在 Android 10（API 级别 29）及更高版本中，您必须在应用的清单中声明 ACCESS_BACKGROUND_LOCATION 权限，以便请求在运行时于后台访问位置信息。
     在较低版本的 Android 系统中，当应用获得前台位置信息访问权限时，也会自动获得后台位置信息访问权限。
     -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <uses-permission
         android:name="android.permission.DELETE_CACHE_FILES"
@@ -28,10 +32,10 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <!-- api 30 -->
-<!--    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
     <queries>
-        <package android:name="com.congwiny.android11_2"/>
+        <package android:name="com.congwiny.android11_2" />
     </queries>
 
     <application
@@ -88,10 +92,9 @@
         <!-- Required for Android 10 (API level 29) and higher. -->
         <service
             android:name=".MyNavigationService"
-            android:foregroundServiceType="location"
-             >
-        <!-- Any inner elements would go here. -->
-    </service>
+            android:foregroundServiceType="location">
+            <!-- Any inner elements would go here. -->
+        </service>
     </application>
 
 </manifest>
